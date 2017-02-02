@@ -21,10 +21,10 @@ namespace Sesame.Forms.Sample.Droid
     #nowarn "51" // address-of operator can occur in the code
     #nowarn "1183" // unused 'this' reference
     
-    exception ReturnException6cc6c129c9ce49909f290c38f2d4de77 of obj
-    exception ReturnNoneException6cc6c129c9ce49909f290c38f2d4de77
+    exception ReturnExceptiond7b5a635ebcc4f9b95ea5b071918bef1 of obj
+    exception ReturnNoneExceptiond7b5a635ebcc4f9b95ea5b071918bef1
     [<AutoOpen>]
-    module FuncConvertFinalOverload6cc6c129c9ce49909f290c38f2d4de77 =
+    module FuncConvertFinalOverloadd7b5a635ebcc4f9b95ea5b071918bef1 =
       // This extension member adds to the FuncConvert type and is the last resort member in the method overloading rules. 
       type global.Microsoft.FSharp.Core.FuncConvert with
           /// A utility function to convert function values from tupled to curried form

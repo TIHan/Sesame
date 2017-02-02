@@ -33,6 +33,9 @@ type FsCell (app: WeakReference<Xamarin.Forms.Application>, view: View) as this 
 
         context.ClearDisposables ()
 
+    override this.OnBindingContextChanged () =
+        base.OnBindingContextChanged ()
+
 [<RequireQualifiedAccess>]
 type Cell =
     | View of view: View * height: double

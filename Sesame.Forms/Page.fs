@@ -45,13 +45,13 @@ type ToolbarItem =
 
 [<RequireQualifiedAccess>]
 type Page =
-    | Content of content: View * toolbarItems: ToolbarItem list
+    | Content of content: View * title: string * toolbarItems: ToolbarItem list
 
     member this.Build (app: Xamarin.Forms.Application) =
         match this with
-        | Content (comp, toolbarItems) ->
+        | Content (comp, title, toolbarItems) ->
             let contentPage = FsContentPage (WeakReference<Xamarin.Forms.Application> (app), comp)
-
+            contentPage.Title <- title
             toolbarItems
             |> List.iter (fun x ->
                 Xamarin.Forms.ToolbarItem (x.Text, x.Icon, Action (x.Activated))

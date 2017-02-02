@@ -6,16 +6,31 @@ open Sesame
 
 type XView = Xamarin.Forms.View
 
-type CustomViewProperty<'T when 'T :> XView> =
+type CustomClassProperty<'T> =
     | Once of (FormsContext -> 'T -> unit)
     | Subscribe of (FormsContext -> 'T -> unit)
-    | OnceAndSubscribe of (FormsContext -> 'T -> unit) * (FormsContext -> XView -> unit)
+    | OnceAndSubscribe of (FormsContext -> 'T -> unit) * (FormsContext -> 'T -> unit)
 
-and CustomView =
+and CustomClass<'T> =
     {
-        Create: FormsContext -> XView
-        Subscribe: FormsContext -> XView -> unit
+        Create: FormsContext -> 'T
+        Subscribe: FormsContext -> 'T -> unit
     }
+
+and CustomViewProperty<'T when 'T :> XView> = CustomClassProperty<'T>
+
+and CustomView = CustomClass<XView>
+
+//and CustomViewProperty<'T when 'T :> XView> =
+//    | Once of (FormsContext -> 'T -> unit)
+//    | Subscribe of (FormsContext -> 'T -> unit)
+//    | OnceAndSubscribe of (FormsContext -> 'T -> unit) * (FormsContext -> 'T -> unit)
+
+//and CustomView =
+//    {
+//        Create: FormsContext -> XView
+//        Subscribe: FormsContext -> XView -> unit
+//    }
 
 and View =
     | Custom of CustomView

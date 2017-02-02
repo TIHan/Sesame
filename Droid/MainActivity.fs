@@ -17,5 +17,5 @@ type MainActivity() =
 
         Xamarin.Forms.Forms.Init (this, bundle)
 
-        this.LoadApplication (new Sesame.App ())
+        this.LoadApplication (new Sesame.Forms.Sample.App())
 

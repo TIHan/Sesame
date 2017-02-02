@@ -1,6 +1,7 @@
 ﻿namespace Sesame
 
 open System
+open System.Collections.Generic
 
 [<Sealed>]
 type Val<'T>
@@ -15,6 +16,22 @@ type Var<'T> =
     member Update : ('T -> 'T) -> unit
 
     member Val : Val<'T>
+
+[<Sealed>]
+type ValList<'T>
+
+[<Sealed>]
+type VarList<'T> =
+
+    new : IEnumerable<'T> -> VarList<'T>
+
+    member Add : 'T -> unit
+
+    member Remove : int -> unit
+
+    member Clear : unit -> unit
+
+    member Val : ValList<'T>
 
 [<Sealed>]
 type CmdVal<'T>
@@ -59,6 +76,8 @@ type Context =
     new : ((unit -> unit) -> unit) -> Context
 
     member Sink : 'Obj -> ('Obj -> 'T -> unit) -> Val<'T> -> unit
+
+    member SinkList : 'Obj -> ('Obj -> int -> 'T -> unit) -> ('Obj -> int -> unit) -> ('Obj -> unit) -> ValList<'T> -> unit
 
     member SinkCmd : 'Obj -> ('Obj -> 'T -> unit) -> CmdVal<'T> -> unit
 

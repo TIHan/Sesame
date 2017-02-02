@@ -1,6 +1,7 @@
 ﻿namespace Sesame.Forms
 
 open System
+open System.Collections.ObjectModel
 
 open Sesame
 
@@ -71,11 +72,9 @@ type FsImage () =
         member val DisappearingEvent = Event<unit> ()
 
 type FsListView (app: WeakReference<Xamarin.Forms.Application>) =
-    inherit Xamarin.Forms.ListView ()
+    inherit Xamarin.Forms.ListView (Xamarin.Forms.ListViewCachingStrategy.RecycleElement)
 
-    override this.CreateDefault (item: obj) =
-        let lazyCell = (item :?> Cell)
-        lazyCell.Build (app)
+    override this.CreateDefault (item: obj) = item :?> Xamarin.Forms.Cell
 
     interface IView with
 
@@ -125,12 +124,6 @@ module ViewComponentProperties =
                                     ^T :> IView
                                     > value =
         View.onceProperty (fun _ xView -> (^T : (member set_HorizontalOptions : LayoutOptions -> unit) (xView, value)))
-
-    let inline text< 
-                                    ^T when ^T : (member set_Text : string -> unit) and
-                                    ^T :> XView and
-                                    ^T :> IView> value =
-        View.onceProperty (fun _ xView -> (^T : (member set_Text : string -> unit) (xView, value)))
 
     let inline xAlign< 
                                     ^T when ^T : (member set_XAlign : TextAlignment -> unit) and
@@ -240,10 +233,39 @@ module ViewComponentProperties =
                 context.Sink view (fun view value -> (^T : (member set_Text : string -> unit) (view, value))) va
             )
 
-        let inline itemsSource< ^T when ^T :> FsListView> (va: Val<Cell list>) =
+        let inline isRefreshing< 
+                                    ^T when ^T : (member set_IsRefreshing : bool -> unit) and
+                                    ^T :> XView and
+                                    ^T :> IView
+                                    > (va: Val<bool>) =
             View.onceProperty (fun context view ->
-                va |> context.Sink view (fun (view: ^T) values ->
-                    view.ItemsSource <- values
+                context.Sink view (fun view value -> (^T : (member set_IsRefreshing : bool -> unit) (view, value))) va
+            )
+
+        let inline itemsSource< ^T when ^T :> FsListView> (va: ValList<Cell>) =
+            View.onceProperty (
+                (fun context view ->
+
+                    let f = fun (view: ^T) index (value: Cell) ->
+                        let items = view.ItemsSource :?> ObservableCollection<Xamarin.Forms.Cell>
+                        let cell = value.Build (WeakReference<Xamarin.Forms.Application> (context.Application))
+                        if index < items.Count then
+                            items.[index] <- cell
+                        else
+                            items.Add (cell)
+
+                    let g = fun (view: ^T) index ->
+                        let items = view.ItemsSource :?> ObservableCollection<Xamarin.Forms.Cell>
+
+                        if index < items.Count then
+                            items.RemoveAt (index)
+
+                    let h = fun (view: ^T) ->
+                        let items = view.ItemsSource :?> ObservableCollection<Xamarin.Forms.Cell>
+
+                        items.Clear ()
+
+                    va |> context.SinkList view f g h
                 )
             )
 
@@ -280,6 +302,21 @@ module ViewComponentProperties =
                 |> context.AddDisposable
             )
 
+        let inline refreshing<      ^T when ^T :> XView
+                                    and ^T :> IView
+                                    and ^T : (member add_Refreshing : EventHandler -> unit)
+                                    and ^T : (member remove_Refreshing : EventHandler -> unit)> f =
+            View.subscribeProperty (fun context view' ->
+                let del = EventHandler (fun _ _ -> f ())
+                (^T : (member add_Refreshing : EventHandler -> unit) (view', del))
+                { new IDisposable with
+
+                    member this.Dispose () =
+                        (^T : (member remove_Refreshing : EventHandler -> unit) (view', del))
+                }
+                |> context.AddDisposable
+            )
+
         let inline initialized f =
             View.subscribeProperty (fun context xView ->
                 (xView :> IView).InitializedEvent.Publish
@@ -309,6 +346,9 @@ module ViewComponentProperties =
                     page.Build app
                 )
             )
+
+    let inline text value =
+        Dynamic.text (Val.constant value)
 
 [<AutoOpen>]
 module Views =
@@ -341,5 +381,8 @@ module Views =
 
     let listView props items =
         View.lift (fun context -> 
-            FsListView (WeakReference<Xamarin.Forms.Application> (context.Application))
+            let view = FsListView (WeakReference<Xamarin.Forms.Application> (context.Application))
+            view.ItemsSource <- ObservableCollection<Xamarin.Forms.Cell> ()
+            view.IsPullToRefreshEnabled <- true
+            view
         ) ([ Dynamic.itemsSource items ] @ props)
