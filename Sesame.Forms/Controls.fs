@@ -72,7 +72,7 @@ type FsImage () =
         member val DisappearingEvent = Event<unit> ()
 
 type FsListView (app: WeakReference<Xamarin.Forms.Application>) =
-    inherit Xamarin.Forms.ListView (Xamarin.Forms.ListViewCachingStrategy.RecycleElement)
+    inherit Xamarin.Forms.ListView (Xamarin.Forms.ListViewCachingStrategy.RetainElement)
 
     override this.CreateDefault (item: obj) = item :?> Xamarin.Forms.Cell
 
@@ -103,6 +103,13 @@ module ViewComponentProperties =
     type Rectangle = Xamarin.Forms.Rectangle
 
     type StackOrientation = Xamarin.Forms.StackOrientation
+
+    let inline name< 
+                                    ^T when ^T : (member set_AutomationId : string -> unit) and
+                                    ^T :> XView and
+                                    ^T :> IView
+                                     > value =
+        View.onceProperty (fun _ xView -> (^T : (member set_AutomationId : string -> unit) (xView, value)))
 
     let inline orientation< 
                                     ^T when ^T : (member set_Orientation : StackOrientation -> unit) and

@@ -11,6 +11,7 @@ type AppDelegate () =
     inherit FormsApplicationDelegate ()
 
     override this.FinishedLaunching (app, options) =
+        Xamarin.Calabash.Start();
         Forms.Init()
         this.LoadApplication (new Sesame.Forms.Sample.App())
         base.FinishedLaunching(app, options)

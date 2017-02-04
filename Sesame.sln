@@ -11,6 +11,8 @@ Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Sesame.Forms.Sample.iOS", "
 EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Sesame.Forms.Sample.Droid", "Droid\Sesame.Forms.Sample.Droid.fsproj", "{6938C9A1-7231-413E-9A5F-92B647FC2B3A}"
 EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Sesame.Forms.Sample.UITest", "Sesame.Forms.Sample.UITest\Sesame.Forms.Sample.UITest.fsproj", "{2ADB1EE9-C7B9-4150-8A40-133262F3E518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,5 +83,17 @@ Global
 		{6938C9A1-7231-413E-9A5F-92B647FC2B3A}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{6938C9A1-7231-413E-9A5F-92B647FC2B3A}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{6938C9A1-7231-413E-9A5F-92B647FC2B3A}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Release|iPhone.Build.0 = Release|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{2ADB1EE9-C7B9-4150-8A40-133262F3E518}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

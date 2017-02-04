@@ -6,7 +6,7 @@ open Sesame.Forms
 module Test =
 
     let exoplanetItemView (exoplanet: Exoplanet) =
-        stackLayout [ verticalOptions LayoutOptions.Center ]
+        stackLayout [ name "ExoplanetStackLayout"; verticalOptions LayoutOptions.Center ]
             [
                 label [ text exoplanet.pl_hostname ]
             ]
@@ -38,7 +38,7 @@ module Test =
 
         stackLayout [ horizontalOptions LayoutOptions.Center ] 
             [
-                listView [ Dynamic.isRefreshing isRefreshing.Val; appearing; refreshing ] varList.Val
+                listView [ name "KeplerList"; Dynamic.isRefreshing isRefreshing.Val; refreshing ] varList.Val
             ]
 
 type App() as this =
